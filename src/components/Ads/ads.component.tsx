@@ -1,15 +1,25 @@
-import React from 'react';
-import {View, Text, FlatList, Image} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  RefreshControl,
+  Pressable,
+} from 'react-native';
 import styles from './ads.style';
 import useGetRequest from '../../hooks/useGetRequest';
 import {API_BASE} from '../../../config';
 import {IRecommendation} from '../../types/recomendation.type';
 import Loader from '../../ui/Loader/loader.ui';
+import Error from '../../ui/Error/error.ui';
 
 interface IAds {}
 
 const Ads: React.FC<IAds> = () => {
-  const {data, loading, error} = useGetRequest<IRecommendation[]>({
+  const [refreshing, setRefreshing] = useState(false);
+
+  const {data, loading, error, refresh} = useGetRequest<IRecommendation[]>({
     url: `${API_BASE}/recommends`,
   });
   const recommendation: IRecommendation[] = data || [];
@@ -18,7 +28,12 @@ const Ads: React.FC<IAds> = () => {
   return (
     <View style={styles.container}>
       {error ? (
-        <Text>Error</Text>
+        <>
+          <Error />
+          <Pressable style={styles.retryBtn} onPress={refresh}>
+            <Text style={styles.retryText}>Retry</Text>
+          </Pressable>
+        </>
       ) : loading ? (
         <Loader />
       ) : (
@@ -27,6 +42,9 @@ const Ads: React.FC<IAds> = () => {
           numColumns={numColumns}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+          }
           renderItem={({item, index}) => (
             <View
               style={[
