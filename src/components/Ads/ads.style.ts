@@ -3,12 +3,12 @@ import {colors} from '../../constants/colors';
 
 export default StyleSheet.create({
   container: {
-    paddingTop: 30,
     flex: 1,
+    paddingTop:5
   },
   adCont: {
     flex: 1,
-    marginBottom:12
+    marginVertical:16
   },
 
   adTitle: {
