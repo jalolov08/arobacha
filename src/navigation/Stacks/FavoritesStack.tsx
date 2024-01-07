@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator();
 export default function FavoritesStack() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Main" component={Favorites} />
+      <Stack.Screen name="Favorites" component={Favorites} />
     </Stack.Navigator>
   );
 }

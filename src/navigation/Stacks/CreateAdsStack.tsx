@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator();
 export default function CreateAdsStack() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Main" component={CreateAds} />
+      <Stack.Screen name="CreateAds" component={CreateAds} />
     </Stack.Navigator>
   );
 }

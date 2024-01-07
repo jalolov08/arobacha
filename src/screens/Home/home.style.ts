@@ -6,6 +6,6 @@ export default StyleSheet.create({
     flex:1,
     justifyContent:"flex-start",
     backgroundColor: colors.white,
-    padding: 25,
+    padding: 20,
   },
 });
