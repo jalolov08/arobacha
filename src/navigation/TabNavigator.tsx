@@ -9,23 +9,24 @@ import FavoritesStack from './Stacks/FavoritesStack';
 import CreateAdsStack from './Stacks/CreateAdsStack';
 import ChatStack from './Stacks/ChatStack';
 import ProfileStack from './Stacks/ProfileStack';
+import AuthStack from './Stacks/AuthStack';
 const Tab = createBottomTabNavigator();
-
+const isAuth = false;
 const tabConfigs = [
   {
-    name: 'Home',
+    name: 'HomeStack',
     component: HomeStack,
     icon: 'home',
     showLabel: false,
   },
   {
-    name: 'Chat',
+    name: 'ChatStack',
     component: ChatStack,
     icon: 'chatbubbles',
     showLabel: false,
   },
   {
-    name: 'CreateAds',
+    name: 'CreateAdsStack',
     component: CreateAdsStack,
     icon: 'add',
     showLabel: false,
@@ -43,14 +44,14 @@ const tabConfigs = [
     },
   },
   {
-    name: 'Favorites',
+    name: 'FavoritesStack',
     component: FavoritesStack,
     icon: 'star',
     showLabel: false,
   },
   {
-    name: 'Profile',
-    component: ProfileStack,
+    name: isAuth ? 'ProfileStack' : 'AuthStack',
+    component: isAuth ? ProfileStack : AuthStack,
     icon: 'person-circle-outline',
     showLabel: false,
   },
@@ -70,14 +71,6 @@ export default function TabNavigator() {
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
-          tabBarStyle: {
-            height: 50,
-            position: 'absolute',
-            bottom: 16,
-            left: 16,
-            right: 16,
-            borderRadius: 10,
-          },
         }}>
         {tabConfigs.map((tab, index) => (
           <Tab.Screen
@@ -95,6 +88,17 @@ export default function TabNavigator() {
                   {...tab.customIcon}
                 />
               ),
+              tabBarStyle:
+                tab.name === 'AuthStack'
+                  ? {display: 'none'}
+                  : {
+                      height: 50,
+                      position: 'absolute',
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                      borderRadius: 10,
+                    },
             }}
           />
         ))}
