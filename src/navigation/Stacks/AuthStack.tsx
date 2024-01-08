@@ -1,9 +1,11 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../../screens/Login/login.screen';
+import Register from '../../screens/Register/register.screen';
+import { ScreensType } from '../../types/screen.type';
 
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<ScreensType>();
 
 export default function AuthStack() {
   return (
@@ -11,7 +13,8 @@ export default function AuthStack() {
       screenOptions={{
         headerShown: false,
       }}>
-        <Stack.Screen name='Loign' component={Login} />
+        <Stack.Screen name='Login' component={Login} />
+        <Stack.Screen name='Register' component={Register} />
     </Stack.Navigator>
   );
 }
