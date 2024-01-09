@@ -29,7 +29,6 @@ export default function Login() {
 
     if (loginResult.error) {
       setError(loginResult.msg.error);
-      console.log(loginResult.msg.error);
     } else {
       navigation.navigate('Home');
     }

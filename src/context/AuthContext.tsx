@@ -7,6 +7,13 @@ interface IAuth {
   authState?: {token: string | null; authenticated: boolean | null};
   onLogin?: (username: string, password: string) => Promise<any>;
   onLogout?: () => Promise<any>;
+  onRegister?: (
+    password: string,
+    username: string,
+    phone: string,
+    name: string,
+    surname?: string,
+  ) => Promise<any>;
 }
 
 const AuthContext = createContext<IAuth>({});
@@ -60,11 +67,31 @@ export const AuthProvider = ({children}: any) => {
     await AsyncStorage.removeItem('token');
     axios.defaults.headers.common['Authorization'] = '';
   };
-
+  const register = async (
+    password: string,
+    username: string,
+    phone: string,
+    name: string,
+    surname: string,
+  ) => {
+    try {
+      const result = await axios.post(`${API_BASE}/auth/register`, {
+        password,
+        username,
+        phone,
+        name,
+        surname,
+      });
+      return result;
+    } catch (e) {
+      return {error: true, msg: (e as any).response.data};
+    }
+  };
   const value = {
     onLogin: login,
     authState,
     onLogout: logout,
+    onRegister: register,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

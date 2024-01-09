@@ -22,13 +22,9 @@ const Ads: React.FC<IAds> = () => {
   const {data, loading, error, refresh} = useGetRequest<IRecommendation[]>({
     url: `${API_BASE}/recommends`,
   });
-  console.log(data);
-  console.log(error);
-  
-  
+
   const recommendation: IRecommendation[] = data || [];
   const numColumns = 2;
-console.log(typeof(recommendation));
 
   return (
     <View style={styles.container}>
