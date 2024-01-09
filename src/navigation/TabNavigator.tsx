@@ -10,62 +10,66 @@ import CreateAdsStack from './Stacks/CreateAdsStack';
 import ChatStack from './Stacks/ChatStack';
 import ProfileStack from './Stacks/ProfileStack';
 import AuthStack from './Stacks/AuthStack';
+import {useAuth} from '../context/AuthContext';
 const Tab = createBottomTabNavigator();
-const isAuth = false;
-const tabConfigs = [
-  {
-    name: 'HomeStack',
-    component: HomeStack,
-    icon: 'home',
-    showLabel: false,
-  },
-  {
-    name: 'ChatStack',
-    component: ChatStack,
-    icon: 'chatbubbles',
-    showLabel: false,
-  },
-  {
-    name: 'CreateAdsStack',
-    component: CreateAdsStack,
-    icon: 'add',
-    showLabel: false,
-    customIcon: {
-      name: 'add',
-      color: colors.white,
-      size: 27,
-      style: {
-        backgroundColor: colors.blue,
-        padding: 10,
-        borderRadius: 50,
-        position: 'absolute',
-        top: -16,
-      },
-    },
-  },
-  {
-    name: 'FavoritesStack',
-    component: FavoritesStack,
-    icon: 'star',
-    showLabel: false,
-  },
-  {
-    name: isAuth ? 'ProfileStack' : 'AuthStack',
-    component: isAuth ? ProfileStack : AuthStack,
-    icon: 'person-circle-outline',
-    showLabel: false,
-  },
-];
-
-const iconContainerStyle = StyleSheet.create({
-  focused: {
-    backgroundColor: 'rgba(0, 123, 255, 0.09)',
-    borderRadius: 100,
-    padding: 8,
-  },
-});
 
 export default function TabNavigator() {
+  const {authState} = useAuth();
+
+  const isAuth = authState?.authenticated || false;
+  const tabConfigs = [
+    {
+      name: 'HomeStack',
+      component: HomeStack,
+      icon: 'home',
+      showLabel: false,
+    },
+    {
+      name: 'ChatStack',
+      component: ChatStack,
+      icon: 'chatbubbles',
+      showLabel: false,
+    },
+    {
+      name: 'CreateAdsStack',
+      component: CreateAdsStack,
+      icon: 'add',
+      showLabel: false,
+      customIcon: {
+        name: 'add',
+        color: colors.white,
+        size: 27,
+        style: {
+          backgroundColor: colors.blue,
+          padding: 10,
+          borderRadius: 50,
+          position: 'absolute',
+          top: -16,
+        },
+      },
+    },
+    {
+      name: 'FavoritesStack',
+      component: FavoritesStack,
+      icon: 'star',
+      showLabel: false,
+    },
+    {
+      name: isAuth ? 'ProfileStack' : 'AuthStack',
+      component: isAuth ? ProfileStack : AuthStack,
+      icon: 'person-circle-outline',
+      showLabel: false,
+    },
+  ];
+
+  const iconContainerStyle = StyleSheet.create({
+    focused: {
+      backgroundColor: 'rgba(0, 123, 255, 0.09)',
+      borderRadius: 100,
+      padding: 8,
+    },
+  });
+
   return (
     <NavigationContainer>
       <Tab.Navigator
