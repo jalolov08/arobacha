@@ -7,6 +7,7 @@ interface IAuth {
   authState?: {token: string | null; authenticated: boolean | null};
   onLogin?: (username: string, password: string) => Promise<any>;
   onLogout?: () => Promise<any>;
+  onGetMe?: () => Promise<any>;
   onRegister?: (
     password: string,
     username: string,
@@ -21,6 +22,7 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 export const AuthProvider = ({children}: any) => {
+  const [userData, setUserData] = useState();
   const [authState, setAuthState] = useState<{
     token: string | null;
     authenticated: boolean | null;
@@ -67,6 +69,7 @@ export const AuthProvider = ({children}: any) => {
     await AsyncStorage.removeItem('token');
     axios.defaults.headers.common['Authorization'] = '';
   };
+
   const register = async (
     password: string,
     username: string,
@@ -87,11 +90,20 @@ export const AuthProvider = ({children}: any) => {
       return {error: true, msg: (e as any).response.data};
     }
   };
+  const getme = async () => {
+    try {
+      const result = await axios.get(`${API_BASE}/profile/me`);
+      return result;
+    } catch (e) {
+      return {error: true, msg: (e as any).response.data};
+    }
+  };
   const value = {
     onLogin: login,
     authState,
     onLogout: logout,
     onRegister: register,
+    onGetMe: getme,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
