@@ -93,7 +93,9 @@ export const AuthProvider = ({children}: any) => {
   const getme = async () => {
     try {
       const result = await axios.get(`${API_BASE}/profile/me`);
-      return result;
+     
+      
+      return result.data.me;
     } catch (e) {
       return {error: true, msg: (e as any).response.data};
     }
