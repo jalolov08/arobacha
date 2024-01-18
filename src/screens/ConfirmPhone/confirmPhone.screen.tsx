@@ -1,4 +1,4 @@
-import {View, Text, Image, ScrollView} from 'react-native';
+import {View, Text, Image, ScrollView, Alert} from 'react-native';
 import React, {useState} from 'react';
 import styles from './confirmPhone.style';
 import HeaderBack from '../../ui/HeaderBack/headerBack.ui';
@@ -6,13 +6,25 @@ import phone from '../../assets/images/hand_phone.png';
 import {CodeField, Cursor} from 'react-native-confirmation-code-field';
 import {colors} from '../../constants/colors';
 
+import {API_BASE} from '../../../config';
+import Button from '../../ui/Button/button.ui';
+import axios from 'axios';
+
 const CELL_COUNT = 4;
 
 export default function ConfirmPhone() {
   const [code, setCode] = useState('');
 
-  const handleCodeChange = (text: string) => {
-    setCode(text);
+  const handleVerify = async () => {
+    try {
+      const response = await axios.post(`${API_BASE}/auth/verify`, {
+        code: code,
+      });
+
+      Alert.alert('Success', 'Code verified successfully');
+    } catch (error) {
+      Alert.alert('Error', 'Code verification failed. Please try again.');
+    }
   };
 
   return (
@@ -25,9 +37,9 @@ export default function ConfirmPhone() {
         </Text>
         <CodeField
           value={code}
-          onChangeText={handleCodeChange}
+          onChangeText={(text: string) => setCode(text)}
           cellCount={CELL_COUNT}
-          rootStyle={{marginVertical: 30}}
+          rootStyle={{marginTop: 30}}
           keyboardType="number-pad"
           textContentType="oneTimeCode"
           renderCell={({index, symbol, isFocused}) => (
@@ -48,6 +60,12 @@ export default function ConfirmPhone() {
               </Text>
             </View>
           )}
+        />
+
+        <Button
+          text="Проверить"
+          containerStyle={{padding: 30, marginBottom: 40}}
+          onPress={handleVerify}
         />
       </View>
     </ScrollView>

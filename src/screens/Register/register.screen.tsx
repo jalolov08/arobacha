@@ -37,7 +37,7 @@ export default function Register() {
     if (registerResult.error) {
       setError(registerResult.msg.error);
     } else {
-      navigation.navigate('Login');
+      navigation.navigate('ConfirmPhone');
     }
   };
 
