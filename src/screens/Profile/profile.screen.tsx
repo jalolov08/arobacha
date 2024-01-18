@@ -5,6 +5,8 @@ import Header from '../../components/Header/header.component';
 import ProfileTop from '../../components/ProfileTop/profileTop.component';
 import {useAuth} from '../../context/AuthContext';
 import {decryptData} from '../../utils/decryptData';
+import Button from '../../ui/Button/button.ui';
+import {colors} from '../../constants/colors';
 export default function Profile() {
   const {onGetMe} = useAuth();
   const [me, setMe] = useState<{
@@ -54,6 +56,24 @@ export default function Profile() {
           'https://cdn-icons-png.flaticon.com/512/149/149071.png'
         }
       />
+      <View
+        style={{
+          marginTop: 30,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Button text="Редактировать" containerStyle={{width: '83%'}} />
+        <Button
+          icon="settings-outline"
+          containerStyle={{
+            width: '15%',
+            backgroundColor: colors.white,
+            borderWidth: 1,
+            borderColor: colors.blue,
+          }}
+        />
+      </View>
     </View>
   );
 }

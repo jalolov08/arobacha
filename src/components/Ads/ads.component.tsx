@@ -8,22 +8,23 @@ import {
   Pressable,
 } from 'react-native';
 import styles from './ads.style';
-import useGetRequest from '../../hooks/useGetRequest';
-import {API_BASE} from '../../../config';
 import {IRecommendation} from '../../types/recomendation.type';
 import Loader from '../../ui/Loader/loader.ui';
 import Error from '../../ui/Error/error.ui';
+import FastImage from 'react-native-fast-image';
+import {colors} from '../../constants/colors';
 
-interface IAds {}
+interface IAds {
+  data: IRecommendation[];
+  loading: boolean;
+  error: Error | null;
+  refresh: () => void;
+}
 
-const Ads: React.FC<IAds> = () => {
+const Ads: React.FC<IAds> = ({data, loading, error, refresh}) => {
   const [refreshing, setRefreshing] = useState(false);
 
-  const {data, loading, error, refresh} = useGetRequest<IRecommendation[]>({
-    url: `${API_BASE}/recommends`,
-  });
-
-  const recommendation: IRecommendation[] = data || [];
+  const recommendation = data || [];
   const numColumns = 2;
 
   return (
@@ -52,10 +53,19 @@ const Ads: React.FC<IAds> = () => {
                 styles.adCont,
                 {marginLeft: index % numColumns !== 0 ? 12 : 0},
               ]}>
-              <Image
-                source={{uri: item.photos[0]}}
-                style={{width: 165, height: 110, borderRadius: 5}}
+              <FastImage
+                source={{
+                  uri: item.photos[0],
+                  priority: FastImage.priority.high,
+                }}
+                style={{
+                  width: 165,
+                  height: 110,
+                  borderRadius: 5,
+                  backgroundColor: colors.grayLight,
+                }}
               />
+
               <Text style={styles.adTitle} numberOfLines={1}>
                 {item.brand} {item.model}, {item.year}
               </Text>
