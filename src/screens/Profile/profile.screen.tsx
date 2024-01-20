@@ -19,6 +19,7 @@ export default function Profile() {
     followers: any[];
     follows: any[];
     name: string;
+    surname: string;
     phone: string;
     photoUri: string;
     username: string;
@@ -28,6 +29,7 @@ export default function Profile() {
     followers: [],
     follows: [],
     name: '',
+    surname: '',
     phone: '',
     username: '',
     photoUri: '',
@@ -51,6 +53,7 @@ export default function Profile() {
         const getMeResult = await onGetMe();
         const decryptedMe = decryptData(getMeResult);
         setMe(decryptedMe);
+        console.log(decryptedMe);
       } catch (error) {
         console.error('Error fetching or decrypting data:', error);
       }
@@ -64,6 +67,9 @@ export default function Profile() {
       <Header />
       <ProfileTop
         username={me.username}
+        name={me.name}
+        about={me.about}
+        surname={me.surname}
         followersCount={me.followers.length}
         followingCount={me.follows.length}
         announcementsCount={adsData.length}
