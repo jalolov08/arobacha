@@ -14,9 +14,9 @@ export default function AuthStack() {
       screenOptions={{
         headerShown: false,
       }}>
-        <Stack.Screen name='ConfirmPhone' component={ConfirmPhone}/>
         <Stack.Screen name='Login' component={Login} />
         <Stack.Screen name='Register' component={Register} />
+        <Stack.Screen name='ConfirmPhone' component={ConfirmPhone}/>
     </Stack.Navigator>
   );
 }

@@ -13,7 +13,7 @@ import Loader from '../../ui/Loader/loader.ui';
 import Error from '../../ui/Error/error.ui';
 import FastImage from 'react-native-fast-image';
 import {colors} from '../../constants/colors';
-
+import Zero from '../../ui/Zero/zero.ui';
 interface IAds {
   data: IRecommendation[];
   loading: boolean;
@@ -24,11 +24,11 @@ interface IAds {
 const Ads: React.FC<IAds> = ({data, loading, error, refresh}) => {
   const [refreshing, setRefreshing] = useState(false);
 
-  const recommendation = data || [];
   const numColumns = 2;
 
   return (
     <View style={styles.container}>
+      {/* <Zero /> */}
       {error ? (
         <>
           <Error />
@@ -40,7 +40,7 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh}) => {
         <Loader />
       ) : (
         <FlatList
-          data={recommendation}
+          data={data}
           numColumns={numColumns}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
