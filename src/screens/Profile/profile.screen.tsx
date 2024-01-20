@@ -41,9 +41,8 @@ export default function Profile() {
   useEffect(() => {
     if (data) {
       setAdsData(data);
-      console.log(data);
       const decryptedAds = decryptData(data.ads);
-      setAdsData(decryptedAds)
+      setAdsData(decryptedAds);
     }
   }, [data]);
   useEffect(() => {
@@ -52,7 +51,6 @@ export default function Profile() {
         const getMeResult = await onGetMe();
         const decryptedMe = decryptData(getMeResult);
         setMe(decryptedMe);
-        console.log(decryptedMe);
       } catch (error) {
         console.error('Error fetching or decrypting data:', error);
       }
@@ -68,7 +66,7 @@ export default function Profile() {
         username={me.username}
         followersCount={me.followers.length}
         followingCount={me.follows.length}
-        announcementsCount={12}
+        announcementsCount={adsData.length}
         profilePhotoUri={
           me?.photoUri ||
           'https://cdn-icons-png.flaticon.com/512/149/149071.png'
