@@ -13,17 +13,22 @@ export default StyleSheet.create({
     color: colors.blue,
     fontWeight: '500',
     marginVertical: '20%',
+    fontFamily:'Manrope-SemiBold'
+
   },
   loginErrorText:{
     fontSize:12,
     color:colors.red,
-    fontWeight:'500'
+    fontWeight:'500',
+    fontFamily:'Manrope-SemiBold'
 
   },
   forgot:{
     fontSize:12,
     color:colors.black,
-    fontWeight:'500'
+    fontWeight:'500',
+    fontFamily:'Manrope-SemiBold'
+
   },
   textsCont:{
 flexDirection:"row",

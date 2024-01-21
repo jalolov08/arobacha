@@ -17,7 +17,9 @@ export default StyleSheet.create({
     fontSize:20,
     color:colors.black,
     fontWeight:'400',
-    lineHeight:28
+    lineHeight:28,
+    fontFamily:'Manrope-Regular'
+
   },
   codeFieldRoot: {
     marginTop: 20,

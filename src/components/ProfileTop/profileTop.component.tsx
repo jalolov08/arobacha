@@ -89,6 +89,8 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     marginBottom: 10,
+    fontFamily:'Manrope-SemiBold'
+
   },
 
   profileTextsCont: {
@@ -109,18 +111,26 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '500',
     color: colors.black,
+    fontFamily:'Manrope-SemiBold'
+
   },
   countText: {
     fontSize: 11,
     color: '#767676',
+    fontFamily:'Manrope-SemiBold'
+
   },
   username: {
     fontSize: 16,
     fontWeight: '400',
     color: colors.blue,
+    fontFamily:'Manrope-Regular'
+
   },
   description: {
     fontSize: 14,
     color: colors.dark,
+    fontFamily:'Manrope-SemiBold'
+
   },
 });

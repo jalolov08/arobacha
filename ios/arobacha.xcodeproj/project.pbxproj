@@ -14,6 +14,14 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-arobacha-arobachaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-arobacha-arobachaTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		1458F84796B54C9B9DBEC66B /* Manrope-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9545BFD02F0C4A5FB0D3723F /* Manrope-Bold.ttf */; };
+		12A1916AAB8440D6B26808E9 /* Manrope-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72A959D164954894937AD833 /* Manrope-ExtraBold.ttf */; };
+		428631A4F9D64D0094F252CC /* Manrope-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D6AA603E00E4361881E2B1D /* Manrope-ExtraLight.ttf */; };
+		7D4B5A4CEC3A421E9F1CC6C1 /* Manrope-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F51D46FD96F49F98518775D /* Manrope-Light.ttf */; };
+		1576D6436FC4459FB10242EF /* Manrope-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E02834FE6B634E38B9D0DD50 /* Manrope-Medium.ttf */; };
+		72399C121C44428496449FFA /* Manrope-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C819F38ED78C4E1F9B8C421F /* Manrope-Regular.ttf */; };
+		EF738142000D468596447C67 /* Manrope-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50C60097513B4FCBBB374DCF /* Manrope-SemiBold.ttf */; };
+		B1BA6C28CD3B4361888461BD /* Manrope-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56795D59CA3D4784AB102E30 /* Manrope-VariableFont_wght.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +52,14 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = arobacha/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-arobacha-arobachaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-arobacha-arobachaTests.release.xcconfig"; path = "Target Support Files/Pods-arobacha-arobachaTests/Pods-arobacha-arobachaTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		9545BFD02F0C4A5FB0D3723F /* Manrope-Bold.ttf */ = {isa = PBXFileReference; name = "Manrope-Bold.ttf"; path = "../src/assets/fonts/Manrope-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		72A959D164954894937AD833 /* Manrope-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Manrope-ExtraBold.ttf"; path = "../src/assets/fonts/Manrope-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3D6AA603E00E4361881E2B1D /* Manrope-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Manrope-ExtraLight.ttf"; path = "../src/assets/fonts/Manrope-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8F51D46FD96F49F98518775D /* Manrope-Light.ttf */ = {isa = PBXFileReference; name = "Manrope-Light.ttf"; path = "../src/assets/fonts/Manrope-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E02834FE6B634E38B9D0DD50 /* Manrope-Medium.ttf */ = {isa = PBXFileReference; name = "Manrope-Medium.ttf"; path = "../src/assets/fonts/Manrope-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C819F38ED78C4E1F9B8C421F /* Manrope-Regular.ttf */ = {isa = PBXFileReference; name = "Manrope-Regular.ttf"; path = "../src/assets/fonts/Manrope-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		50C60097513B4FCBBB374DCF /* Manrope-SemiBold.ttf */ = {isa = PBXFileReference; name = "Manrope-SemiBold.ttf"; path = "../src/assets/fonts/Manrope-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		56795D59CA3D4784AB102E30 /* Manrope-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "Manrope-VariableFont_wght.ttf"; path = "../src/assets/fonts/Manrope-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +138,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				E4DF532EE9EE437FAF9406A7 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +164,22 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		E4DF532EE9EE437FAF9406A7 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				9545BFD02F0C4A5FB0D3723F /* Manrope-Bold.ttf */,
+				72A959D164954894937AD833 /* Manrope-ExtraBold.ttf */,
+				3D6AA603E00E4361881E2B1D /* Manrope-ExtraLight.ttf */,
+				8F51D46FD96F49F98518775D /* Manrope-Light.ttf */,
+				E02834FE6B634E38B9D0DD50 /* Manrope-Medium.ttf */,
+				C819F38ED78C4E1F9B8C421F /* Manrope-Regular.ttf */,
+				50C60097513B4FCBBB374DCF /* Manrope-SemiBold.ttf */,
+				56795D59CA3D4784AB102E30 /* Manrope-VariableFont_wght.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -243,6 +276,14 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				1458F84796B54C9B9DBEC66B /* Manrope-Bold.ttf in Resources */,
+				12A1916AAB8440D6B26808E9 /* Manrope-ExtraBold.ttf in Resources */,
+				428631A4F9D64D0094F252CC /* Manrope-ExtraLight.ttf in Resources */,
+				7D4B5A4CEC3A421E9F1CC6C1 /* Manrope-Light.ttf in Resources */,
+				1576D6436FC4459FB10242EF /* Manrope-Medium.ttf in Resources */,
+				72399C121C44428496449FFA /* Manrope-Regular.ttf in Resources */,
+				EF738142000D468596447C67 /* Manrope-SemiBold.ttf in Resources */,
+				B1BA6C28CD3B4361888461BD /* Manrope-VariableFont_wght.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

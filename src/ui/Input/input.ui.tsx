@@ -48,5 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingHorizontal: 22,
     paddingVertical: 12,
+    fontFamily:'Manrope-SemiBold'
+
   },
 });

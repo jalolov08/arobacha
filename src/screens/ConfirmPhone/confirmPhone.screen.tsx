@@ -55,7 +55,12 @@ export default function ConfirmPhone() {
                 borderColor: isFocused ? '#007AFF' : colors.gray,
                 borderRadius: 10,
               }}>
-              <Text style={{fontSize: 24, color: '#000'}}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  color: '#000',
+                  fontFamily: 'Manrope-SemiBold',
+                }}>
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
             </View>

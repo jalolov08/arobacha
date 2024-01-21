@@ -17,6 +17,6 @@ export default StyleSheet.create({
   categoryText: {
     fontSize: 10,
     color: colors.dark,
-    fontWeight: '600',
+    fontFamily:'Manrope-Bold'
   },
 });

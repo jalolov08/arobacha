@@ -53,7 +53,6 @@ export default function Profile() {
         const getMeResult = await onGetMe();
         const decryptedMe = decryptData(getMeResult);
         setMe(decryptedMe);
-        console.log(decryptedMe);
       } catch (error) {
         console.error('Error fetching or decrypting data:', error);
       }

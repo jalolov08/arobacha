@@ -55,6 +55,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 20,
     fontWeight: '500',
+    fontFamily:'Manrope-SemiBold'
+
   },
   icon: {
     fontSize: 24,

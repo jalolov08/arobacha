@@ -16,16 +16,22 @@ export default StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     marginTop: 5,
+    fontFamily:'Manrope-Bold'
+
   },
   adPrice: {
     color: colors.dark,
     fontSize: 12,
     fontWeight: '500',
+    fontFamily:'Manrope-SemiBold'
+
   },
   adCity: {
     fontSize: 10,
-    color: colors.darkLight,
+    color: colors.dark,
     fontWeight: '400',
+    fontFamily:'Manrope-Regular'
+
   },
   retryBtn: {
     width: 100,
