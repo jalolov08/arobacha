@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   FlatList,
-  Image,
   RefreshControl,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import styles from './ads.style';
 import {IRecommendation} from '../../types/recomendation.type';
@@ -19,13 +19,25 @@ interface IAds {
   loading: boolean;
   error: Error | null;
   refresh: () => void;
+  loadMore: () => void;
 }
 
-const Ads: React.FC<IAds> = ({data, loading, error, refresh}) => {
+const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
   const [refreshing, setRefreshing] = useState(false);
-
+  const [allDataLoaded, setAllDataLoaded] = useState(false);
   const numColumns = 2;
-
+  const handleEndReached = () => {
+    if (!loading) {
+      loadMore();
+    }
+  };
+  useEffect(() => {
+    console.log(data.length);
+    
+    if (data.length === 0) {
+      setAllDataLoaded(true);
+    }
+  }, [data]);
   return (
     <View style={styles.container}>
       {/* <Zero /> */}
@@ -37,7 +49,7 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh}) => {
           </Pressable>
         </>
       ) : loading ? (
-        <Loader />
+        <Loader/>
       ) : (
         <FlatList
           data={data}
@@ -47,6 +59,14 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={refresh} />
           }
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={
+            allDataLoaded ? null : (
+              <ActivityIndicator color={colors.blue} size={50} />
+            )
+          }
+          
           renderItem={({item, index}) => (
             <View
               style={[

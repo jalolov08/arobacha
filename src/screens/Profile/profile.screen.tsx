@@ -77,7 +77,7 @@ export default function Profile() {
           'https://cdn-icons-png.flaticon.com/512/149/149071.png'
         }
       />
-      <View
+      {/* <View
         style={{
           marginTop: 30,
           flexDirection: 'row',
@@ -94,7 +94,7 @@ export default function Profile() {
             borderColor: colors.blue,
           }}
         />
-      </View>
+      </View> */}
       <View style={{flex: 1}}>
         <Ads data={adsData} refresh={refresh} loading={loading} error={error} />
       </View>

@@ -10,20 +10,31 @@ import {API_BASE} from '../../../config';
 export default function Home() {
   const [adsData, setAdsData] = useState<IRecommendation[]>([]);
 
+  const [page, setPage] = useState(1);
+
   const {data, loading, error, refresh} = useGetRequest<IRecommendation[]>({
-    url: `${API_BASE}/recommends`,
+    url: `${API_BASE}/recommends?page=${page}`,
   });
 
   useEffect(() => {
     if (data) {
-      setAdsData(data);
+      setAdsData([...adsData, ...data]);
     }
   }, [data]);
+  const loadMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
   return (
     <View style={styles.container}>
       <Header />
       <Category />
-      <Ads data={adsData} refresh={refresh} loading={loading} error={error} />
+      <Ads
+        data={adsData}
+        refresh={refresh}
+        loading={loading}
+        error={error}
+        loadMore={loadMore}
+      />
     </View>
   );
 }
