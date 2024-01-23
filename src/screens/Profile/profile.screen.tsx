@@ -36,6 +36,20 @@ export default function Profile() {
   });
   const [adsData, setAdsData] = useState<IRecommendation[]>([]);
   const [page, setPage] = useState(1);
+  const [adsCount, setAdsCount] = useState(0);
+  const {
+    data: adsCountData,
+    loading: adsCountLoading,
+    error: adsCountError,
+  } = useGetRequest<{adsCount: number}>({
+    url: `${API_BASE}/users/${me.username}/adscount`,
+  });
+
+  useEffect(() => {
+    if (adsCountData) {
+      setAdsCount(adsCountData.adsCount);
+    }
+  }, [adsCountData]);
 
   const {data, loading, error, refresh} = useGetRequest<IRecommendation[]>({
     url: `${API_BASE}/profile/my/ads?page=${page}`,
@@ -43,9 +57,8 @@ export default function Profile() {
 
   useEffect(() => {
     if (data) {
-
       const decryptedAds = decryptData(data.ads);
-      setAdsData((prevData) => [...prevData, ...decryptedAds]);
+      setAdsData(prevData => [...prevData, ...decryptedAds]);
     }
   }, [data]);
   const loadMore = () => {
@@ -75,7 +88,7 @@ export default function Profile() {
         surname={me.surname}
         followersCount={me.followers.length}
         followingCount={me.follows.length}
-        announcementsCount={adsData.length}
+        announcementsCount={adsCount}
         profilePhotoUri={
           me?.photoUri ||
           'https://cdn-icons-png.flaticon.com/512/149/149071.png'
@@ -100,7 +113,13 @@ export default function Profile() {
         />
       </View> */}
       <View style={{flex: 1}}>
-        <Ads data={adsData} refresh={refresh} loading={loading} error={error} loadMore={loadMore} />
+        <Ads
+          data={adsData}
+          refresh={refresh}
+          loading={loading}
+          error={error}
+          loadMore={loadMore}
+        />
       </View>
     </View>
   );
