@@ -32,8 +32,6 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
     }
   };
   useEffect(() => {
-    console.log(data.length);
-    
     if (data.length === 0) {
       setAllDataLoaded(true);
     }
@@ -49,7 +47,7 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
           </Pressable>
         </>
       ) : loading ? (
-        <Loader/>
+        <Loader />
       ) : (
         <FlatList
           data={data}
@@ -66,7 +64,6 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
               <ActivityIndicator color={colors.blue} size={50} />
             )
           }
-          
           renderItem={({item, index}) => (
             <View
               style={[

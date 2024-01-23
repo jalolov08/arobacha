@@ -35,18 +35,22 @@ export default function Profile() {
     photoUri: '',
   });
   const [adsData, setAdsData] = useState<IRecommendation[]>([]);
+  const [page, setPage] = useState(1);
 
   const {data, loading, error, refresh} = useGetRequest<IRecommendation[]>({
-    url: `${API_BASE}/profile/my/ads`,
+    url: `${API_BASE}/profile/my/ads?page=${page}`,
   });
 
   useEffect(() => {
     if (data) {
-      setAdsData(data);
+
       const decryptedAds = decryptData(data.ads);
-      setAdsData(decryptedAds);
+      setAdsData((prevData) => [...prevData, ...decryptedAds]);
     }
   }, [data]);
+  const loadMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
   useEffect(() => {
     const getMe = async () => {
       try {
@@ -96,7 +100,7 @@ export default function Profile() {
         />
       </View> */}
       <View style={{flex: 1}}>
-        <Ads data={adsData} refresh={refresh} loading={loading} error={error} />
+        <Ads data={adsData} refresh={refresh} loading={loading} error={error} loadMore={loadMore} />
       </View>
     </View>
   );
