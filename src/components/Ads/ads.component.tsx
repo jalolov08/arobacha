@@ -6,6 +6,7 @@ import {
   RefreshControl,
   Pressable,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import styles from './ads.style';
 import {IRecommendation} from '../../types/recomendation.type';
@@ -14,6 +15,7 @@ import Error from '../../ui/Error/error.ui';
 import FastImage from 'react-native-fast-image';
 import {colors} from '../../constants/colors';
 import Zero from '../../ui/Zero/zero.ui';
+import {useNavigation} from '@react-navigation/native';
 interface IAds {
   data: IRecommendation[];
   loading: boolean;
@@ -26,6 +28,7 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [allDataLoaded, setAllDataLoaded] = useState(false);
   const numColumns = 2;
+  const navigation = useNavigation();
   const handleEndReached = () => {
     if (!loading) {
       loadMore();
@@ -65,7 +68,10 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
             )
           }
           renderItem={({item, index}) => (
-            <View
+            <TouchableOpacity
+              onPress={() => 
+              navigation.navigate("AdDetails",  {adId:item._id})
+              }
               style={[
                 styles.adCont,
                 {marginLeft: index % numColumns !== 0 ? 12 : 0},
@@ -88,7 +94,7 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
               </Text>
               <Text style={styles.adPrice}>{item.price}c</Text>
               <Text style={styles.adCity}>{item.city}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}

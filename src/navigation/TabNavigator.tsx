@@ -1,5 +1,8 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet} from 'react-native';
 import Icon, {Icons} from '../ui/Icon/icon.ui';
@@ -11,19 +14,15 @@ import ChatStack from './Stacks/ChatStack';
 import ProfileStack from './Stacks/ProfileStack';
 import AuthStack from './Stacks/AuthStack';
 import {useAuth} from '../context/AuthContext';
+
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   const {authState} = useAuth();
-
   const isAuth = authState?.authenticated || false;
+
   const tabConfigs = [
-    {
-      name: 'HomeStack',
-      component: HomeStack,
-      icon: 'home',
-      showLabel: false,
-    },
+    {name: 'HomeStack', component: HomeStack, icon: 'home', showLabel: false},
     {
       name: 'ChatStack',
       component: ChatStack,
@@ -70,6 +69,15 @@ export default function TabNavigator() {
     },
   });
 
+  const getTabBarVisibility = route => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+
+    if (routeName?.includes('AdDetails')) {
+      return 'none';
+    }
+    return 'flex';
+  };
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -81,7 +89,7 @@ export default function TabNavigator() {
             key={index}
             name={tab.name}
             component={tab.component}
-            options={{
+            options={({route}) => ({
               tabBarShowLabel: tab.showLabel,
               tabBarIcon: ({focused}) => (
                 <Icon
@@ -102,8 +110,9 @@ export default function TabNavigator() {
                       left: 16,
                       right: 16,
                       borderRadius: 10,
+                      display: getTabBarVisibility(route),
                     },
-            }}
+            })}
           />
         ))}
       </Tab.Navigator>
