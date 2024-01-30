@@ -8,6 +8,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: colors.white,
     padding: 20,
+    paddingBottom:0
   },
   title: {
     color: colors.blue,
@@ -85,4 +86,35 @@ export default StyleSheet.create({
     fontFamily: 'Manrope-Medium',
     color: colors.dark,
   },
+  description:{
+    fontSize:12,
+    color:colors.black,
+    fontFamily: 'Manrope-Medium',
+    marginTop:25
+  },
+  ownerCont:{
+    flex:1,
+    justifyContent:'space-between',
+    flexDirection:'row',
+    marginTop:30
+  },
+  ownerPhoto:{
+    width:44,
+    height:44,
+    borderRadius:22,
+    backgroundColor:colors.grayLight
+  },
+  ownerName:{
+    fontSize:14,
+    fontFamily: 'Manrope-Medium',
+    color:colors.black,
+    marginLeft:20
+  },
+  ownerAdsCount:{
+    fontSize:8,
+    fontFamily: 'Manrope-Medium',
+    color:colors.dark,
+    marginLeft:20
+
+  }
 });

@@ -10,6 +10,9 @@ import FastImage from 'react-native-fast-image';
 import Loader from '../../ui/Loader/loader.ui';
 import Icon, {Icons} from '../../ui/Icon/icon.ui';
 import {colors} from '../../constants/colors';
+import axios from 'axios';
+import Button from '../../ui/Button/button.ui';
+import Error from '../../ui/Error/error.ui';
 interface Ad {
   _id: string;
   bodyType: string;
@@ -20,7 +23,6 @@ interface Ad {
   createdAt: string;
   customsCleared: boolean;
   description: string;
-  doors: number;
   engineCapacity: string;
   fuelType: string;
   mileage: number;
@@ -39,15 +41,36 @@ export default function AdDetails() {
   const {
     params: {adId},
   } = useRoute();
-  const {data, loading} = useGetRequest({
-    url: `${API_BASE}/category/car/${adId}`,
-  });
   const [ad, setAd] = useState<Ad>(null);
+  const [owner, setOwner] = useState('');
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false);
+  const [error, setError] = useState(null);
+  const {data, loading} = useGetRequest({
+    url: `${API_BASE}/ad/${adId}`,
+  });
+  const fetchOwnerProfile = async (ownerId: string) => {
+    try {
+      const ownerResponse = await axios.get(
+        `${API_BASE}/users/${ownerId}/profile`,
+      );
+      const decryptedOwner = decryptData(ownerResponse.data.user);
+      setOwner(decryptedOwner);
+    } catch (error) {
+      console.error('Error fetching ad data:', error);
+    }
+  };
 
   useEffect(() => {
-    if (data && data.car) {
-      const decryptedAd = decryptData(data.car);
-      setAd(decryptedAd);
+    if (data && data.ad) {
+      try {
+        const decryptedAd = decryptData(data.ad);
+        setAd(decryptedAd);
+        fetchOwnerProfile(decryptedAd.owner);
+        setIsLoadingComplete(true);
+      } catch (error) {
+        setError(error);
+        console.error('Error decrypting ad data:', error);
+      }
     }
   }, [data]);
 
@@ -57,7 +80,7 @@ export default function AdDetails() {
       {label: 'Состояние', value: ad.condition},
       {label: 'Двигатель', value: ad.fuelType},
       {label: 'Кузов', value: ad.bodyType},
-      {label: 'Растаможен в РТ', value: ad.customsCleared},
+      {label: 'Растаможен в РТ', value: ad.customsCleared ? 'Да' : 'Нет'},
       {label: 'Мощность', value: `${ad.engineCapacity}л.с`},
       {label: 'Коробка передач', value: ad.transmission},
       {label: 'Пробег', value: `${ad.mileage}км`},
@@ -71,14 +94,6 @@ export default function AdDetails() {
       </View>
     ));
   };
-
-  if (loading || !ad) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Loader />
-      </View>
-    );
-  }
   const convertDate = (dateString: string) => {
     const months = [
       'января',
@@ -102,6 +117,18 @@ export default function AdDetails() {
 
     return `${day} ${monthName}`;
   };
+  if (loading || !isLoadingComplete || error) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        {error ? (
+          <Error />
+        ) : (
+          <Loader />
+        )}
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <HeaderBack />
@@ -151,6 +178,17 @@ export default function AdDetails() {
           </View>
           <Text style={styles.stats}>Характеристики</Text>
           <View>{renderStatistics()}</View>
+          <Text style={styles.description}>{ad.description}</Text>
+          <View style={styles.ownerCont}>
+        <View style={{flexDirection:'row' }}>
+        <FastImage source={{uri:owner.photoUri}} style={styles.ownerPhoto} />
+             <View>
+             <Text style={styles.ownerName}>{owner.name} {owner.surname}</Text>
+             <Text style={styles.ownerAdsCount}>12 обявлений</Text>
+             </View>
+        </View>
+        <Button text='Подписаться' containerStyle={{paddingVertical:3 , paddingHorizontal:12}} textStyle={{fontSize:14 , lineHeight:19 }}/>
+          </View>
         </View>
       </ScrollView>
     </View>
