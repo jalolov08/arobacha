@@ -13,6 +13,7 @@ import {colors} from '../../constants/colors';
 import axios from 'axios';
 import Button from '../../ui/Button/button.ui';
 import Error from '../../ui/Error/error.ui';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface Ad {
   _id: string;
   bodyType: string;
@@ -45,34 +46,70 @@ export default function AdDetails() {
   const [owner, setOwner] = useState('');
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [error, setError] = useState(null);
-  const {data, loading} = useGetRequest({
-    url: `${API_BASE}/ad/${adId}`,
-  });
-  const fetchOwnerProfile = async (ownerId: string) => {
-    try {
-      const ownerResponse = await axios.get(
-        `${API_BASE}/users/${ownerId}/profile`,
-      );
-      const decryptedOwner = decryptData(ownerResponse.data.user);
-      setOwner(decryptedOwner);
-    } catch (error) {
-      console.error('Error fetching ad data:', error);
-    }
-  };
+  // const {data, loading, refresh} = useGetRequest({
+  //   url: `${API_BASE}/ad/${adId}`,
+  // });
+
+
 
   useEffect(() => {
-    if (data && data.ad) {
+    const storageKey = `ad_${adId}`;
+
+    const fetchData = async () => {
       try {
-        const decryptedAd = decryptData(data.ad);
+        const adResponse = await axios.get(`${API_BASE}/ad/${adId}`);
+        const decryptedAd = decryptData(adResponse.data.ad);
         setAd(decryptedAd);
         fetchOwnerProfile(decryptedAd.owner);
         setIsLoadingComplete(true);
+        AsyncStorage.setItem(storageKey, JSON.stringify(decryptedAd));
       } catch (error) {
         setError(error);
-        console.error('Error decrypting ad data:', error);
+        console.error('Error fetching ad data:', error);
       }
-    }
-  }, [data]);
+    };
+
+    const fetchOwnerProfile = async (ownerId: string) => {
+      try {
+        const ownerResponse = await axios.get(
+          `${API_BASE}/users/${ownerId}/profile`
+        );
+        const decryptedOwner = decryptData(ownerResponse.data.user);
+        setOwner(decryptedOwner);
+      } catch (error) {
+        console.error('Error fetching owner profile:', error);
+      }
+    };
+
+    AsyncStorage.getItem(storageKey)
+      .then((storedAd) => {
+        if (storedAd) {
+          const parsedAd: Ad = JSON.parse(storedAd);
+          setAd(parsedAd);
+          fetchOwnerProfile(parsedAd.owner);
+          setIsLoadingComplete(true);
+        } else {
+          fetchData();
+        }
+      })
+      .catch((error) => {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      });
+  }, [adId]);
+
+  // useEffect(() => {
+  //   if (data && data.ad) {
+  //     try {
+  //       const decryptedAd = decryptData(data.ad);
+  //       setAd(decryptedAd);
+  //       fetchOwnerProfile(decryptedAd.owner);
+  //       setIsLoadingComplete(true);
+  //     } catch (error) {
+  //       setError(error);
+  //       console.error('Error decrypting ad data:', error);
+  //     }
+  //   }
+  // }, [data]);
 
   const renderStatistics = () => {
     const statistics = [
@@ -117,14 +154,10 @@ export default function AdDetails() {
 
     return `${day} ${monthName}`;
   };
-  if (loading || !isLoadingComplete || error) {
+  if (   !isLoadingComplete || error) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        {error ? (
-          <Error />
-        ) : (
-          <Loader />
-        )}
+        {error ? <Error /> : <Loader />}
       </View>
     );
   }
@@ -180,14 +213,23 @@ export default function AdDetails() {
           <View>{renderStatistics()}</View>
           <Text style={styles.description}>{ad.description}</Text>
           <View style={styles.ownerCont}>
-        <View style={{flexDirection:'row' }}>
-        <FastImage source={{uri:owner.photoUri}} style={styles.ownerPhoto} />
-             <View>
-             <Text style={styles.ownerName}>{owner.name} {owner.surname}</Text>
-             <Text style={styles.ownerAdsCount}>12 обявлений</Text>
-             </View>
-        </View>
-        <Button text='Подписаться' containerStyle={{paddingVertical:3 , paddingHorizontal:12}} textStyle={{fontSize:14 , lineHeight:19 }}/>
+            <View style={{flexDirection: 'row'}}>
+              <FastImage
+                source={{uri: owner.photoUri}}
+                style={styles.ownerPhoto}
+              />
+              <View>
+                <Text style={styles.ownerName}>
+                  {owner.name} {owner.surname}
+                </Text>
+                <Text style={styles.ownerAdsCount}>12 обявлений</Text>
+              </View>
+            </View>
+            <Button
+              text="Подписаться"
+              containerStyle={{paddingVertical: 3, paddingHorizontal: 12}}
+              textStyle={{fontSize: 14, lineHeight: 19}}
+            />
           </View>
         </View>
       </ScrollView>
