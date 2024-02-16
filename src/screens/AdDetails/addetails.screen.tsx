@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, ScrollView, ActivityIndicator} from 'react-native';
+import {View, Text, ScrollView, ActivityIndicator, TouchableWithoutFeedback} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {API_BASE} from '../../../config';
 import {decryptData} from '../../utils/decryptData';
@@ -15,6 +15,7 @@ import Button from '../../ui/Button/button.ui';
 import Error from '../../ui/Error/error.ui';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SimilarAds from '../../components/SimilarAds/similarAds.component';
+import ImageView from 'react-native-lightbox-gallery';
 interface Ad {
   _id: string;
   bodyType: string;
@@ -50,7 +51,7 @@ export default function AdDetails() {
   const [error, setError] = useState(null);
   const [adsCount, setAdsCount] = useState(0);
   const [similarAds, setSimilarAds] = useState([]);
-  const [similarLoading , setSimilarLoading] = useState(true)
+  const [similarLoading, setSimilarLoading] = useState(true);
   const {
     data: adsCountData,
     loading: adsCountLoading,
@@ -58,7 +59,11 @@ export default function AdDetails() {
   } = useGetRequest<{adsCount: number}>({
     url: `${API_BASE}/users/${owner}/adscount`,
   });
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
+    const openImageInFullScreen = (index) => {
+        setSelectedImageIndex(index);
+    };
   useEffect(() => {
     if (isLoadingComplete) {
       const fetchSimilarAds = async () => {
@@ -69,11 +74,10 @@ export default function AdDetails() {
           const similarAdsData = similarAdsResponse.data.similarAds;
           const decryptedAds = decryptData(similarAdsData);
           setSimilarAds(decryptedAds);
-          setSimilarLoading(false)
+          setSimilarLoading(false);
         } catch (error) {
           console.error('Error fetching similar ads:', error);
-          setSimilarLoading(true)
-
+          setSimilarLoading(true);
         }
       };
 
@@ -95,7 +99,8 @@ export default function AdDetails() {
         const adResponse = await axios.get(`${API_BASE}/ad/${adId}`);
         const decryptedAd = decryptData(adResponse.data.ad);
         setAd(decryptedAd);
-
+        // console.log(ad.photos);
+        
         fetchOwnerProfile(decryptedAd.owner);
         setIsLoadingComplete(true);
         AsyncStorage.setItem(storageKey, JSON.stringify(decryptedAd));
@@ -122,7 +127,7 @@ export default function AdDetails() {
         if (storedAd) {
           const parsedAd: Ad = JSON.parse(storedAd);
           setAd(parsedAd);
-
+          
           fetchOwnerProfile(parsedAd.owner);
           setIsLoadingComplete(true);
         } else {
@@ -206,17 +211,25 @@ export default function AdDetails() {
             horizontal
             contentContainerStyle={styles.imageScrollView}
             showsHorizontalScrollIndicator={false}>
-            {ad.photos.map((image, index) => (
-              <FastImage
-                key={index}
-                source={{uri: image}}
-                style={[
-                  styles.image,
-                  ad.photos.length > 1 && index === 0 && styles.firstImage,
-                  ad.photos.length === 1 && styles.fullWidthImage,
-                ]}
-              />
+              {ad.photos.map((image, index) => (
+                <TouchableWithoutFeedback key={index} onPress={() => openImageInFullScreen(index)}>
+                    <FastImage
+                        source={{ uri: image }}
+                        style={[
+                            styles.image,
+                            ad.photos.length > 1 && index === 0 && styles.firstImage,
+                            ad.photos.length === 1 && styles.fullWidthImage,
+                        ]}
+                    />
+                </TouchableWithoutFeedback>
             ))}
+
+            <ImageView
+                images={ ad.photos.map(image => ({ uri: image }))}
+                imageIndex={selectedImageIndex !== null ? selectedImageIndex : 0}
+                visible={selectedImageIndex !== null}
+                onRequestClose={() => setSelectedImageIndex(null)}
+            />
           </ScrollView>
           <View style={styles.dateCont}>
             <Text style={styles.date}>
@@ -255,7 +268,7 @@ export default function AdDetails() {
             />
           </View>
         </View>
-        <SimilarAds ads={similarAds} loading={similarLoading}/>
+        <SimilarAds ads={similarAds} loading={similarLoading} />
       </ScrollView>
     </View>
   );
