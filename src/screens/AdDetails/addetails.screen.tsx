@@ -14,6 +14,7 @@ import axios from 'axios';
 import Button from '../../ui/Button/button.ui';
 import Error from '../../ui/Error/error.ui';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SimilarAds from '../../components/SimilarAds/similarAds.component';
 interface Ad {
   _id: string;
   bodyType: string;
@@ -36,6 +37,7 @@ interface Ad {
   views: number;
   viewsToday: number;
   year: number;
+  category: string;
 }
 
 export default function AdDetails() {
@@ -46,11 +48,44 @@ export default function AdDetails() {
   const [owner, setOwner] = useState('');
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [error, setError] = useState(null);
-  // const {data, loading, refresh} = useGetRequest({
-  //   url: `${API_BASE}/ad/${adId}`,
-  // });
+  const [adsCount, setAdsCount] = useState(0);
+  const [similarAds, setSimilarAds] = useState([]);
+  const [similarLoading , setSimilarLoading] = useState(true)
+  const {
+    data: adsCountData,
+    loading: adsCountLoading,
+    error: adsCountError,
+  } = useGetRequest<{adsCount: number}>({
+    url: `${API_BASE}/users/${owner}/adscount`,
+  });
 
+  useEffect(() => {
+    if (isLoadingComplete) {
+      const fetchSimilarAds = async () => {
+        try {
+          const similarAdsResponse = await axios.get(
+            `${API_BASE}/category/${ad.category}/${adId}/similar`,
+          );
+          const similarAdsData = similarAdsResponse.data.similarAds;
+          const decryptedAds = decryptData(similarAdsData);
+          setSimilarAds(decryptedAds);
+          setSimilarLoading(false)
+        } catch (error) {
+          console.error('Error fetching similar ads:', error);
+          setSimilarLoading(true)
 
+        }
+      };
+
+      fetchSimilarAds();
+    }
+  }, [isLoadingComplete, ad, adId]);
+
+  useEffect(() => {
+    if (adsCountData) {
+      setAdsCount(adsCountData.adsCount);
+    }
+  }, [adsCountData]);
 
   useEffect(() => {
     const storageKey = `ad_${adId}`;
@@ -60,6 +95,7 @@ export default function AdDetails() {
         const adResponse = await axios.get(`${API_BASE}/ad/${adId}`);
         const decryptedAd = decryptData(adResponse.data.ad);
         setAd(decryptedAd);
+
         fetchOwnerProfile(decryptedAd.owner);
         setIsLoadingComplete(true);
         AsyncStorage.setItem(storageKey, JSON.stringify(decryptedAd));
@@ -72,7 +108,7 @@ export default function AdDetails() {
     const fetchOwnerProfile = async (ownerId: string) => {
       try {
         const ownerResponse = await axios.get(
-          `${API_BASE}/users/${ownerId}/profile`
+          `${API_BASE}/users/${ownerId}/profile`,
         );
         const decryptedOwner = decryptData(ownerResponse.data.user);
         setOwner(decryptedOwner);
@@ -82,34 +118,21 @@ export default function AdDetails() {
     };
 
     AsyncStorage.getItem(storageKey)
-      .then((storedAd) => {
+      .then(storedAd => {
         if (storedAd) {
           const parsedAd: Ad = JSON.parse(storedAd);
           setAd(parsedAd);
+
           fetchOwnerProfile(parsedAd.owner);
           setIsLoadingComplete(true);
         } else {
           fetchData();
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Error retrieving data from AsyncStorage:', error);
       });
   }, [adId]);
-
-  // useEffect(() => {
-  //   if (data && data.ad) {
-  //     try {
-  //       const decryptedAd = decryptData(data.ad);
-  //       setAd(decryptedAd);
-  //       fetchOwnerProfile(decryptedAd.owner);
-  //       setIsLoadingComplete(true);
-  //     } catch (error) {
-  //       setError(error);
-  //       console.error('Error decrypting ad data:', error);
-  //     }
-  //   }
-  // }, [data]);
 
   const renderStatistics = () => {
     const statistics = [
@@ -154,7 +177,7 @@ export default function AdDetails() {
 
     return `${day} ${monthName}`;
   };
-  if (   !isLoadingComplete || error) {
+  if (!isLoadingComplete || error) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         {error ? <Error /> : <Loader />}
@@ -222,7 +245,7 @@ export default function AdDetails() {
                 <Text style={styles.ownerName}>
                   {owner.name} {owner.surname}
                 </Text>
-                <Text style={styles.ownerAdsCount}>12 обявлений</Text>
+                <Text style={styles.ownerAdsCount}>{adsCount} обявлений</Text>
               </View>
             </View>
             <Button
@@ -232,6 +255,7 @@ export default function AdDetails() {
             />
           </View>
         </View>
+        <SimilarAds ads={similarAds} loading={similarLoading}/>
       </ScrollView>
     </View>
   );
