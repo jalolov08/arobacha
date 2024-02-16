@@ -8,7 +8,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: colors.white,
     padding: 20,
-    paddingBottom:0
+    paddingBottom: 0,
   },
   title: {
     color: colors.blue,
@@ -45,7 +45,7 @@ export default StyleSheet.create({
   fullWidthImage: {
     width: width * 0.9,
     borderRadius: 5,
-    margin:0
+    margin: 0,
   },
   dateCont: {
     flexDirection: 'row',
@@ -72,9 +72,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical:5,
-    borderBottomWidth:1,
-    borderBottomColor:colors.grayLight
+    paddingVertical: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.grayLight,
   },
   statLabel: {
     fontSize: 15,
@@ -86,35 +86,47 @@ export default StyleSheet.create({
     fontFamily: 'Manrope-Medium',
     color: colors.dark,
   },
-  description:{
-    fontSize:12,
-    color:colors.black,
+  description: {
+    fontSize: 12,
+    color: colors.black,
     fontFamily: 'Manrope-Medium',
-    marginTop:25
+    marginTop: 25,
   },
-  ownerCont:{
-    flex:1,
-    justifyContent:'space-between',
-    flexDirection:'row',
-    marginTop:30
+  ownerCont: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginTop: 30,
   },
-  ownerPhoto:{
-    width:44,
-    height:44,
-    borderRadius:22,
-    backgroundColor:colors.grayLight
+  ownerPhoto: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.grayLight,
   },
-  ownerName:{
-    fontSize:14,
+  ownerName: {
+    fontSize: 14,
     fontFamily: 'Manrope-Medium',
-    color:colors.black,
-    marginLeft:20
+    color: colors.black,
+    marginLeft: 20,
   },
-  ownerAdsCount:{
-    fontSize:8,
+  ownerAdsCount: {
+    fontSize: 8,
     fontFamily: 'Manrope-Medium',
-    color:colors.dark,
-    marginLeft:20
+    color: colors.dark,
+    marginLeft: 20,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  footerText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Manrope-Medium',
 
-  }
+  },
 });

@@ -229,6 +229,13 @@ export default function AdDetails() {
                 imageIndex={selectedImageIndex !== null ? selectedImageIndex : 0}
                 visible={selectedImageIndex !== null}
                 onRequestClose={() => setSelectedImageIndex(null)}
+                animationType='slide'
+                swipeToCloseEnabled={true}
+                FooterComponent={({imageIndex}) => (
+                  <View style={styles.footer}>
+                  <Text style={styles.footerText}>{imageIndex + 1} / {ad.photos.length}</Text>
+              </View>
+                )}
             />
           </ScrollView>
           <View style={styles.dateCont}>
