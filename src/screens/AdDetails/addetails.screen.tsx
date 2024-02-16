@@ -1,5 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, ScrollView, ActivityIndicator, TouchableWithoutFeedback} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {API_BASE} from '../../../config';
 import {decryptData} from '../../utils/decryptData';
@@ -46,6 +52,8 @@ export default function AdDetails() {
     params: {adId},
   } = useRoute();
   const [ad, setAd] = useState<Ad>(null);
+  const scrollViewRef = useRef(null);
+
   const [owner, setOwner] = useState('');
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [error, setError] = useState(null);
@@ -61,9 +69,9 @@ export default function AdDetails() {
   });
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-    const openImageInFullScreen = (index) => {
-        setSelectedImageIndex(index);
-    };
+  const openImageInFullScreen = index => {
+    setSelectedImageIndex(index);
+  };
   useEffect(() => {
     if (isLoadingComplete) {
       const fetchSimilarAds = async () => {
@@ -100,7 +108,7 @@ export default function AdDetails() {
         const decryptedAd = decryptData(adResponse.data.ad);
         setAd(decryptedAd);
         // console.log(ad.photos);
-        
+
         fetchOwnerProfile(decryptedAd.owner);
         setIsLoadingComplete(true);
         AsyncStorage.setItem(storageKey, JSON.stringify(decryptedAd));
@@ -127,7 +135,7 @@ export default function AdDetails() {
         if (storedAd) {
           const parsedAd: Ad = JSON.parse(storedAd);
           setAd(parsedAd);
-          
+
           fetchOwnerProfile(parsedAd.owner);
           setIsLoadingComplete(true);
         } else {
@@ -137,6 +145,11 @@ export default function AdDetails() {
       .catch(error => {
         console.error('Error retrieving data from AsyncStorage:', error);
       });
+  }, [adId]);
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      (scrollViewRef.current as any).scrollTo({y: 0, animated: true});
+    }
   }, [adId]);
 
   const renderStatistics = () => {
@@ -193,7 +206,7 @@ export default function AdDetails() {
   return (
     <View style={styles.container}>
       <HeaderBack />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} ref={scrollViewRef}>
         <View>
           <Text style={styles.title}>
             {ad.brand} {ad.model}, {ad.year}
@@ -211,31 +224,35 @@ export default function AdDetails() {
             horizontal
             contentContainerStyle={styles.imageScrollView}
             showsHorizontalScrollIndicator={false}>
-              {ad.photos.map((image, index) => (
-                <TouchableWithoutFeedback key={index} onPress={() => openImageInFullScreen(index)}>
-                    <FastImage
-                        source={{ uri: image }}
-                        style={[
-                            styles.image,
-                            ad.photos.length > 1 && index === 0 && styles.firstImage,
-                            ad.photos.length === 1 && styles.fullWidthImage,
-                        ]}
-                    />
-                </TouchableWithoutFeedback>
+            {ad.photos.map((image, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => openImageInFullScreen(index)}>
+                <FastImage
+                  source={{uri: image}}
+                  style={[
+                    styles.image,
+                    ad.photos.length > 1 && index === 0 && styles.firstImage,
+                    ad.photos.length === 1 && styles.fullWidthImage,
+                  ]}
+                />
+              </TouchableWithoutFeedback>
             ))}
 
             <ImageView
-                images={ ad.photos.map(image => ({ uri: image }))}
-                imageIndex={selectedImageIndex !== null ? selectedImageIndex : 0}
-                visible={selectedImageIndex !== null}
-                onRequestClose={() => setSelectedImageIndex(null)}
-                animationType='slide'
-                swipeToCloseEnabled={true}
-                FooterComponent={({imageIndex}) => (
-                  <View style={styles.footer}>
-                  <Text style={styles.footerText}>{imageIndex + 1} / {ad.photos.length}</Text>
-              </View>
-                )}
+              images={ad.photos.map(image => ({uri: image}))}
+              imageIndex={selectedImageIndex !== null ? selectedImageIndex : 0}
+              visible={selectedImageIndex !== null}
+              onRequestClose={() => setSelectedImageIndex(null)}
+              animationType="slide"
+              swipeToCloseEnabled={true}
+              FooterComponent={({imageIndex}) => (
+                <View style={styles.footer}>
+                  <Text style={styles.footerText}>
+                    {imageIndex + 1} / {ad.photos.length}
+                  </Text>
+                </View>
+              )}
             />
           </ScrollView>
           <View style={styles.dateCont}>
