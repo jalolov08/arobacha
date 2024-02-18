@@ -27,7 +27,7 @@ export default function Characteristics({
           contStyle={{width: '50%'}}
         />
       </View>
-      <CharacteristicsItem text="Все города" />
+      <CharacteristicsItem text="Все города"  onPress={() => navigation.navigate("SelectCity")}/>
     </View>
   );
 }

@@ -69,7 +69,13 @@ export default function TabNavigator() {
     },
   });
 
-  const visibleRoutes = ['AdDetails', 'Category', 'SelectBrand'];
+  const visibleRoutes = [
+    'AdDetails',
+    'Category',
+    'SelectBrand',
+    'SelectModel',
+    'SelectCity',
+  ];
 
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
