@@ -69,13 +69,16 @@ export default function TabNavigator() {
     },
   });
 
+  const visibleRoutes = ['AdDetails', 'Category', 'SelectBrand'];
+
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    if (routeName?.includes('AdDetails') || routeName?.includes("Category")) {
+    if (visibleRoutes.includes(routeName)) {
       return 'none';
+    } else {
+      return 'flex';
     }
-    return 'flex';
   };
 
   return (

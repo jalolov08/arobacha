@@ -31,6 +31,7 @@ export default function Category() {
   const loadMore = () => {
     setPage(prevPage => prevPage + 1);
   };
+  const header = <Characteristics categoryValue={category?.value} />;
 
   return (
     <View style={styles.container}>
@@ -53,7 +54,7 @@ export default function Category() {
         loading={loading}
         error={error}
         loadMore={loadMore}
-        header={Characteristics}
+        header={header}
       />
     </View>
   );
