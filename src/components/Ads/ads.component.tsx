@@ -14,7 +14,6 @@ import Loader from '../../ui/Loader/loader.ui';
 import Error from '../../ui/Error/error.ui';
 import FastImage from 'react-native-fast-image';
 import {colors} from '../../constants/colors';
-import Zero from '../../ui/Zero/zero.ui';
 import {useNavigation} from '@react-navigation/native';
 interface IAds {
   data: IRecommendation[];
@@ -22,9 +21,17 @@ interface IAds {
   error: Error | null;
   refresh: () => void;
   loadMore: () => void;
+  header?: () => void;
 }
 
-const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
+const Ads: React.FC<IAds> = ({
+  data,
+  loading,
+  error,
+  refresh,
+  loadMore,
+  header,
+}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [allDataLoaded, setAllDataLoaded] = useState(false);
   const numColumns = 2;
@@ -57,6 +64,7 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
           numColumns={numColumns}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
+          ListHeaderComponent={header}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={refresh} />
           }
@@ -69,9 +77,7 @@ const Ads: React.FC<IAds> = ({data, loading, error, refresh, loadMore}) => {
           }
           renderItem={({item, index}) => (
             <TouchableOpacity
-              onPress={() => 
-              navigation.navigate("AdDetails",  {adId:item._id})
-              }
+              onPress={() => navigation.navigate('AdDetails', {adId: item._id})}
               style={[
                 styles.adCont,
                 {marginLeft: index % numColumns !== 0 ? 12 : 0},

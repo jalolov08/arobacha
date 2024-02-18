@@ -72,7 +72,7 @@ export default function TabNavigator() {
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    if (routeName?.includes('AdDetails')) {
+    if (routeName?.includes('AdDetails') || routeName?.includes("Category")) {
       return 'none';
     }
     return 'flex';

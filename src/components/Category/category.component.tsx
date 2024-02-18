@@ -6,8 +6,8 @@ import categoryCar from '../../assets/images/category-car.png';
 import categoryMoto from '../../assets/images/category-moto.png';
 export default function Category() {
   const categories = [
-    {id: 1, name: 'Машины', photo: categoryCar},
-    {id: 2, name: 'Мототранспорт', photo: categoryMoto},
+    {id: 1, name: 'Машины', photo: categoryCar, value: 'car'},
+    {id: 2, name: 'Мототранспорт', photo: categoryMoto, value: 'moto'},
   ];
   const numColumns = 2;
   return (
