@@ -1,5 +1,5 @@
-import {View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {Text, View} from 'react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import styles from './category.style';
 import HeaderBack from '../../ui/HeaderBack/headerBack.ui';
 import Icon, {Icons} from '../../ui/Icon/icon.ui';
@@ -11,14 +11,18 @@ import {decryptData} from '../../utils/decryptData';
 import Ads from '../../components/Ads/ads.component';
 import {IRecommendation} from '../../types/recomendation.type';
 import Characteristics from '../../components/Characteristics/characteristics.component';
-
+import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
+import YearPicker from '../../components/YearPicker/yearPicker.component';
+import { ScrollView } from 'react-native-gesture-handler';
 export default function Category() {
   const {
     params: {category},
   } = useRoute();
   const [adsData, setAdsData] = useState<IRecommendation[]>([]);
   const [page, setPage] = useState(1);
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
+  const snapPoints = useMemo(() => ['40%'], []);
   const {data, loading, error, refresh} = useGetRequest({
     url: `${API_BASE}/category/${category.value}?page=${page}`,
   });
@@ -31,10 +35,14 @@ export default function Category() {
   const loadMore = () => {
     setPage(prevPage => prevPage + 1);
   };
-  const header = <Characteristics categoryValue={category?.value} />;
-
+  const openYear = () => bottomSheetRef.current?.expand();
+  const closeYear = () => bottomSheetRef.current?.close();
+  const header = (
+    <Characteristics categoryValue={category?.value} openYear={openYear} />
+  );
+  const [modalVisible, setModalVisible] = useState(false);
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <HeaderBack
         title={category.name}
         rightEl={
@@ -56,6 +64,13 @@ export default function Category() {
         loadMore={loadMore}
         header={header}
       />
-    </View>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}>
+        <YearPicker />
+      </BottomSheet>
+    </ScrollView>
   );
 }

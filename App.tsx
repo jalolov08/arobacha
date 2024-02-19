@@ -3,12 +3,13 @@ import {View, StyleSheet} from 'react-native';
 import TabNavigator from './src/navigation/TabNavigator';
 import {colors} from './src/constants/colors';
 import {AuthProvider} from './src/context/AuthContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 export default function App() {
   return (
     <AuthProvider>
-      <View style={styles.container}>
+      <GestureHandlerRootView style={styles.container}>
         <TabNavigator />
-      </View>
+      </GestureHandlerRootView>
     </AuthProvider>
   );
 }
