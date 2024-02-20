@@ -17,13 +17,15 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import YearPicker from '../../components/YearPicker/yearPicker.component';
 import {ScrollView} from 'react-native-gesture-handler';
+import PricePicker from '../../components/PricePicker/pricePicker.component';
 export default function Category() {
   const {
     params: {category},
   } = useRoute();
   const [adsData, setAdsData] = useState<IRecommendation[]>([]);
   const [page, setPage] = useState(1);
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRefYear = useRef<BottomSheet>(null);
+  const bottomSheetRefPrice = useRef<BottomSheet>(null);
 
   const snapPoints = useMemo(() => ['40%'], []);
   const {data, loading, error, refresh} = useGetRequest({
@@ -48,10 +50,16 @@ export default function Category() {
     ),
     [],
   );
-  const openYear = () => bottomSheetRef.current?.expand();
-  const closeYear = () => bottomSheetRef.current?.close();
+  const openYear = () => bottomSheetRefYear.current?.expand();
+  const closeYear = () => bottomSheetRefYear.current?.close();
+  const openPrice = () => bottomSheetRefPrice.current?.expand();
+  const closePrice = () => bottomSheetRefPrice.current?.close();
   const header = (
-    <Characteristics categoryValue={category?.value} openYear={openYear} />
+    <Characteristics
+      categoryValue={category?.value}
+      openYear={openYear}
+      openPrice={openPrice}
+    />
   );
   return (
     <ScrollView style={styles.container}>
@@ -84,7 +92,7 @@ export default function Category() {
           header={header}
         />
         <BottomSheet
-          ref={bottomSheetRef}
+          ref={bottomSheetRefYear}
           index={-1}
           enableContentPanningGesture={false}
           snapPoints={snapPoints}
@@ -92,6 +100,17 @@ export default function Category() {
           handleIndicatorStyle={{display: 'none'}}
           enablePanDownToClose={true}>
           <YearPicker onClose={closeYear} />
+        </BottomSheet>
+
+        <BottomSheet
+          ref={bottomSheetRefPrice}
+          index={-1}
+          enableContentPanningGesture={false}
+          snapPoints={snapPoints}
+          backdropComponent={renderBackDrop}
+          handleIndicatorStyle={{display: 'none'}}
+          enablePanDownToClose={true}>
+          <PricePicker onClose={closePrice}/>
         </BottomSheet>
       </View>
     </ScrollView>

@@ -6,9 +6,11 @@ import {useNavigation} from '@react-navigation/native';
 export default function Characteristics({
   categoryValue,
   openYear,
+  openPrice,
 }: {
   categoryValue: string;
   openYear: () => void;
+  openPrice: () => void;
 }) {
   const navigation = useNavigation();
 
@@ -26,7 +28,7 @@ export default function Characteristics({
           contStyle={{width: '18%'}}
           onPress={openYear}
         />
-        <CharacteristicsItem text="Цена" contStyle={{width: '25%'}} />
+        <CharacteristicsItem text="Цена" contStyle={{width: '25%'}} onPress={openPrice} />
         <CharacteristicsItem
           text="Параметры"
           icon="sliders"
