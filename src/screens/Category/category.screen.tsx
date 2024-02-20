@@ -1,5 +1,5 @@
 import {Text, View} from 'react-native';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import styles from './category.style';
 import HeaderBack from '../../ui/HeaderBack/headerBack.ui';
 import Icon, {Icons} from '../../ui/Icon/icon.ui';
@@ -11,9 +11,12 @@ import {decryptData} from '../../utils/decryptData';
 import Ads from '../../components/Ads/ads.component';
 import {IRecommendation} from '../../types/recomendation.type';
 import Characteristics from '../../components/Characteristics/characteristics.component';
-import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 import YearPicker from '../../components/YearPicker/yearPicker.component';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 export default function Category() {
   const {
     params: {category},
@@ -35,42 +38,62 @@ export default function Category() {
   const loadMore = () => {
     setPage(prevPage => prevPage + 1);
   };
+  const renderBackDrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    [],
+  );
   const openYear = () => bottomSheetRef.current?.expand();
   const closeYear = () => bottomSheetRef.current?.close();
   const header = (
     <Characteristics categoryValue={category?.value} openYear={openYear} />
   );
-  const [modalVisible, setModalVisible] = useState(false);
   return (
     <ScrollView style={styles.container}>
-      <HeaderBack
-        title={category.name}
-        rightEl={
-          <Icon
-            type={Icons.Ionicons}
-            name="search-outline"
-            color={colors.black}
-            size={28}
-            style={{marginLeft: 'auto', marginTop: 'auto'}}
-          />
-        }
-      />
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+          backgroundColor: colors.white,
+        }}>
+        <HeaderBack
+          title={category.name}
+          rightEl={
+            <Icon
+              type={Icons.Ionicons}
+              name="search-outline"
+              color={colors.black}
+              size={28}
+              style={{marginLeft: 'auto', marginTop: 'auto'}}
+            />
+          }
+        />
 
-      <Ads
-        data={adsData}
-        refresh={refresh}
-        loading={loading}
-        error={error}
-        loadMore={loadMore}
-        header={header}
-      />
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}>
-        <YearPicker />
-      </BottomSheet>
+        <Ads
+          data={adsData}
+          refresh={refresh}
+          loading={loading}
+          error={error}
+          loadMore={loadMore}
+          header={header}
+        />
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          enableContentPanningGesture={false}
+          snapPoints={snapPoints}
+          backdropComponent={renderBackDrop}
+          handleIndicatorStyle={{display: 'none'}}
+          enablePanDownToClose={true}>
+          <YearPicker onClose={closeYear} />
+        </BottomSheet>
+      </View>
     </ScrollView>
   );
 }

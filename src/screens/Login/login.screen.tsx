@@ -31,6 +31,8 @@ export default function Login() {
       setError(loginResult.msg.error);
     } else {
       navigation.navigate('Home');
+      console.log(loginResult);
+      
     }
   };
 

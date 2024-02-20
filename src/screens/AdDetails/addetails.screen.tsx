@@ -59,6 +59,7 @@ export default function AdDetails() {
   const [error, setError] = useState(null);
   const [adsCount, setAdsCount] = useState(0);
   const [similarAds, setSimilarAds] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [similarLoading, setSimilarLoading] = useState(true);
   const {
     data: adsCountData,
@@ -68,6 +69,22 @@ export default function AdDetails() {
     url: `${API_BASE}/users/${owner}/adscount`,
   });
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const {data, loading} = useGetRequest({
+    url: `${API_BASE}/favorites/my`,
+  });
+  useEffect(() => {
+    const saveFavorites = async () => {
+      try {
+        if (data) {
+          await AsyncStorage.setItem('favorites', JSON.stringify(data));
+          setFavorites(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    saveFavorites();
+  }, [data]);
 
   const openImageInFullScreen = index => {
     setSelectedImageIndex(index);
@@ -172,6 +189,10 @@ export default function AdDetails() {
       </View>
     ));
   };
+  const isFavorite = favorites.some(favorite => favorite._id === ad._id);
+
+  const iconName = isFavorite ? 'star' : 'star-outline';
+  const iconColor = isFavorite ? 'gold' : 'blue';
   const convertDate = (dateString: string) => {
     const months = [
       'января',
@@ -214,10 +235,10 @@ export default function AdDetails() {
           <View style={styles.priceFavCont}>
             <Text style={styles.price}>{ad.price}c</Text>
             <Icon
-              type={Icons.Ionicons}
-              name="star-outline"
-              color={colors.blue}
-              size={26}
+              type={Icons.MaterialCommunityIcons}
+              name={iconName}
+              color={iconColor}
+              size={28}
             />
           </View>
           <ScrollView
