@@ -5,6 +5,8 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Pressable,
+  Alert,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {API_BASE} from '../../../config';
@@ -22,6 +24,8 @@ import Error from '../../ui/Error/error.ui';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SimilarAds from '../../components/SimilarAds/similarAds.component';
 import ImageView from 'react-native-lightbox-gallery';
+import useFavorites from '../../hooks/useFavorites';
+import {useAuth} from '../../context/AuthContext';
 interface Ad {
   _id: string;
   bodyType: string;
@@ -53,13 +57,13 @@ export default function AdDetails() {
   } = useRoute();
   const [ad, setAd] = useState<Ad>(null);
   const scrollViewRef = useRef(null);
-
+  const {authState} = useAuth();
+  const isAuth = authState?.authenticated || false;
   const [owner, setOwner] = useState('');
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   const [error, setError] = useState(null);
   const [adsCount, setAdsCount] = useState(0);
   const [similarAds, setSimilarAds] = useState([]);
-  const [favorites, setFavorites] = useState([]);
   const [similarLoading, setSimilarLoading] = useState(true);
   const {
     data: adsCountData,
@@ -69,22 +73,38 @@ export default function AdDetails() {
     url: `${API_BASE}/users/${owner}/adscount`,
   });
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-  const {data, loading} = useGetRequest({
-    url: `${API_BASE}/favorites/my`,
-  });
+
+  const {favorites, addToFavorites, removeFromFavorites} = useFavorites();
+  const [isFavorite, setIsFavorite] = useState(false);
+
   useEffect(() => {
-    const saveFavorites = async () => {
+    setIsFavorite(favorites.some(favorite => favorite._id === adId));
+  }, [favorites]);
+
+  const iconName = isFavorite ? 'star' : 'star-outline';
+  const iconColor = isFavorite ? 'gold' : 'blue';
+
+  const handleToggleFavorite = async () => {
+    if (isAuth) {
+      setIsFavorite(!isFavorite);
+
       try {
-        if (data) {
-          await AsyncStorage.setItem('favorites', JSON.stringify(data));
-          setFavorites(data);
+        if (isFavorite) {
+          await removeFromFavorites(ad._id);
+        } else {
+          await addToFavorites(ad._id);
         }
       } catch (error) {
-        console.log(error);
+        setIsFavorite(isFavorite);
+        console.error('Ошибка при обновлении избранного:', error);
       }
-    };
-    saveFavorites();
-  }, [data]);
+    } else {
+      Alert.alert(
+        'Ошибка',
+        'Пожалуйста, авторизуйтесь для выполнения этой операции.',
+      );
+    }
+  };
 
   const openImageInFullScreen = index => {
     setSelectedImageIndex(index);
@@ -189,10 +209,7 @@ export default function AdDetails() {
       </View>
     ));
   };
-  const isFavorite = favorites.some(favorite => favorite._id === ad._id);
 
-  const iconName = isFavorite ? 'star' : 'star-outline';
-  const iconColor = isFavorite ? 'gold' : 'blue';
   const convertDate = (dateString: string) => {
     const months = [
       'января',
@@ -234,12 +251,14 @@ export default function AdDetails() {
           </Text>
           <View style={styles.priceFavCont}>
             <Text style={styles.price}>{ad.price}c</Text>
-            <Icon
-              type={Icons.MaterialCommunityIcons}
-              name={iconName}
-              color={iconColor}
-              size={28}
-            />
+            <Pressable onPress={handleToggleFavorite}>
+              <Icon
+                type={Icons.MaterialCommunityIcons}
+                name={iconName}
+                color={iconColor}
+                size={28}
+              />
+            </Pressable>
           </View>
           <ScrollView
             horizontal

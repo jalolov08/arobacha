@@ -5,7 +5,7 @@ import {colors} from '../../constants/colors';
 import Icon, {Icons} from '../../ui/Icon/icon.ui';
 import Input from '../../ui/Input/input.ui';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
-export default function PricePicker({onClose}) {
+export default function PricePicker({onClose}: {onClose: () => void}) {
   const [fromPrice, setFromPrice] = useState('');
   const [toPrice, setToPrice] = useState('');
   const handleReset = () => {
